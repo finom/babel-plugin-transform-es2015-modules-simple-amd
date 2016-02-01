@@ -45,3 +45,6 @@ require('babel').transform('code', {
   plugins: ['transform-es2015-modules-simple-amd']
 });
 ```
+
+
+Thanks to [RReverser](https://github.com/RReverser/babel-plugin-hello-world).
