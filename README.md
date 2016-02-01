@@ -50,6 +50,8 @@ export default x + y;
 thisCodeWillNotBeCalled();
 ```
 
+**Warning 2**. If no ``import`` or ``export`` are presented in JavaScript file, the plugin does nothing (means it doesn't wrap code with ``define``).
+
 ## Installation
 
 ```sh
