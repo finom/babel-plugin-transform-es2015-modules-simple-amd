@@ -18,7 +18,7 @@ define(['/path/to/x', '/path/to/y'], function (x, y) {
 });
 ```
 
-Instead of this one (generated with ``babel-plugin-transform-es2015-modules-amd``).
+Instead of this one (generated with ``babel-plugin-transform-es2015-modules-amd``):
 ```js
 define(['exports', '/path/to/x', '/path/to/y'], function (exports, _x, _y) {
   Object.defineProperty(exports, "__esModule", {
