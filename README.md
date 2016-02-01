@@ -10,11 +10,33 @@ doSomething();
 export default x + y;
 ```
 
-Into this:
+Into this one:
 ```js
 define(['/path/to/x', '/path/to/y'], function (x, y) {
   doSomething();
   return x + y;
+});
+```
+
+Instead of this one (generated with ``babel-plugin-transform-es2015-modules-amd``).
+```js
+define(['exports', '/path/to/x', '/path/to/y'], function (exports, _x, _y) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _x2 = _interopRequireDefault(_x);
+
+  var _y2 = _interopRequireDefault(_y);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      'default': obj
+    };
+  }
+
+  doSomething();
+  exports.default = _x2.default + _y2.default;
 });
 ```
 
