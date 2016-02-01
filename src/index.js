@@ -14,12 +14,15 @@ module.exports = function({ types: t }) {
 				exit(path, file) {
 					let body = path.get("body"),
 						sources = [],
-						vars = [];
+						vars = [],
+						isModular = false;
 
 					for (let path of body) {
 						if (path.isExportDefaultDeclaration()) {
 							let declaration = path.get("declaration");
-							path.replaceWith(t.returnStatement(declaration.node))
+							path.replaceWith(t.returnStatement(declaration.node));
+
+							isModular = true;
 						}
 
 						if (path.isImportDeclaration()) {
@@ -34,16 +37,20 @@ module.exports = function({ types: t }) {
 							vars.push(specifiers[0]);
 
 							path.remove();
+
+							isModular = true;
 						}
 					}
 
-					path.node.body = [
-						buildModule({
-							IMPORT_PATHS: sources,
-							IMPORT_VARS: vars,
-							BODY: path.node.body
-						})
-					];
+					if(isModular) {
+						path.node.body = [
+							buildModule({
+								IMPORT_PATHS: sources,
+								IMPORT_VARS: vars,
+								BODY: path.node.body
+							})
+						];
+					}
 				}
 			}
 		}
