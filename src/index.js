@@ -27,7 +27,7 @@ module.exports = function({ types: t }) {
 								specifiers = path.node.specifiers;
 
 							if (specifiers.length != 1) {
-								throw Error(`Not allowed to use ${specifiers.lengt} specificators`);
+								throw Error(`Not allowed to use ${specifiers.length} specificators`);
 							}
 
 							sources.push(path.node.source);
