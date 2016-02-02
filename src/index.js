@@ -14,6 +14,7 @@ module.exports = function({ types: t }) {
 				exit(path, file) {
 					let body = path.get("body"),
 						sources = [],
+						anonymousSources = [],
 						vars = [],
 						isModular = false;
 
@@ -29,12 +30,15 @@ module.exports = function({ types: t }) {
 							let key = path.node.source.value,
 								specifiers = path.node.specifiers;
 
-							if (specifiers.length != 1) {
+
+							if(specifiers.length == 0) {
+								anonymousSources.push(path.node.source);
+							} else if(specifiers.length == 1) {
+								sources.push(path.node.source);
+								vars.push(specifiers[0]);
+							} else {
 								throw Error(`Not allowed to use ${specifiers.length} specifiers`);
 							}
-
-							sources.push(path.node.source);
-							vars.push(specifiers[0]);
 
 							path.remove();
 
@@ -45,7 +49,7 @@ module.exports = function({ types: t }) {
 					if(isModular) {
 						path.node.body = [
 							buildModule({
-								IMPORT_PATHS: sources,
+								IMPORT_PATHS: sources.concat(anonymousSources),
 								IMPORT_VARS: vars,
 								BODY: path.node.body
 							})

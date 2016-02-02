@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-modules-simple-amd",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Simplified imports and exports",
   "repository": "finom/babel-plugin-transform-es2015-modules-simple-amd",
   "license": "MIT",

@@ -40,7 +40,7 @@ define(['exports', '/path/to/x', '/path/to/y'], function (exports, _x, _y) {
 });
 ```
 
-Other features (like ``import x as y from 'X'`` or ``import * from 'X'`` etc) aren't supported. Just ``import VARIABLE from 'PATH'``.
+Other features (like ``import x as y from 'X'`` or ``import * from 'X'`` etc) aren't supported. Just ``import VARIABLE from 'PATH'`` and ``import 'PATH'``.
 
 **Warning**. Code after ``export default`` will be ignored because it's simply replaced by ``return``.
 
