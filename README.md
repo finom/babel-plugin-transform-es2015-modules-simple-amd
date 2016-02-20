@@ -1,6 +1,6 @@
 # babel-plugin-transform-es2015-modules-simple-amd [![npm version](https://badge.fury.io/js/babel-plugin-transform-es2015-modules-simple-amd.svg)](https://badge.fury.io/js/babel-plugin-transform-es2015-modules-simple-amd)
 
-Limited AMD transformer for ECMAScript 2015 modules.
+Limited transformer for ECMAScript 2015 modules (AMD)
 
 Converts this code:
 ```js
