@@ -1,6 +1,5 @@
 # babel-plugin-transform-es2015-modules-simple-amd [![npm version](https://badge.fury.io/js/babel-plugin-transform-es2015-modules-simple-amd.svg)](https://badge.fury.io/js/babel-plugin-transform-es2015-modules-simple-amd)
 
-
 Limited AMD transformer for ECMAScript 2015 modules.
 
 Converts this code:
@@ -43,15 +42,7 @@ define(['exports', '/path/to/x', '/path/to/y'], function (exports, _x, _y) {
 
 Other features (like ``import x as y from 'X'`` or ``import * from 'X'`` etc) aren't supported. Just ``import VARIABLE from 'PATH'`` and ``import 'PATH'``.
 
-**Warning**. Code after ``export default`` will be ignored because it's simply replaced by ``return``.
-
-```js
-doSomething();
-export default x + y;
-thisCodeWillNotBeCalled();
-```
-
-**Warning 2**. If no ``import`` or ``export`` are presented in JavaScript file, the plugin does nothing (means it doesn't wrap code with ``define``).
+**Warning**. If no ``import`` or ``export`` are presented in JavaScript file, the plugin does nothing (means it doesn't wrap code with ``define``).
 
 ## Installation
 
@@ -79,5 +70,6 @@ require('babel').transform('code', {
 });
 ```
 
+[The same thing for CommonJS](https://github.com/finom/babel-plugin-transform-es2015-modules-simple-commonjs).
 
 Thanks to [RReverser](https://github.com/RReverser/babel-plugin-hello-world).

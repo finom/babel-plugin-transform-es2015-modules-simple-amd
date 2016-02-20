@@ -16,20 +16,28 @@ module.exports = function({ types: t }) {
 						sources = [],
 						anonymousSources = [],
 						vars = [],
-						isModular = false;
+						isModular = false,
+						middleDefaultExportID = false;
 
-					for (let path of body) {
+					for (let i = 0; i < body.length; i++) {
+						let path = body[i],
+							isLast = i == body.length - 1;
+
 						if (path.isExportDefaultDeclaration()) {
 							let declaration = path.get("declaration");
-							path.replaceWith(t.returnStatement(declaration.node));
+
+							if(isLast) {
+								path.replaceWith(t.returnStatement(declaration.node));
+							} else {
+								middleDefaultExportID = path.scope.generateUidIdentifier("export_default");
+								path.replaceWith(t.variableDeclaration('var', [t.variableDeclarator(middleDefaultExportID, declaration.node)]));
+							}
 
 							isModular = true;
 						}
 
 						if (path.isImportDeclaration()) {
-							let key = path.node.source.value,
-								specifiers = path.node.specifiers;
-
+							let specifiers = path.node.specifiers;
 
 							if(specifiers.length == 0) {
 								anonymousSources.push(path.node.source);
@@ -43,6 +51,10 @@ module.exports = function({ types: t }) {
 							path.remove();
 
 							isModular = true;
+						}
+
+						if(isLast && middleDefaultExportID) {
+							path.insertAfter(t.returnStatement(middleDefaultExportID));
 						}
 					}
 
