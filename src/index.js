@@ -3,6 +3,7 @@ import template from "babel-template";
 
 let buildModule = template(`
 define([IMPORT_PATHS], function(IMPORT_VARS) {
+	NAMED_IMPORTS;
 	BODY;
 });
 `);
@@ -16,6 +17,7 @@ module.exports = function({ types: t }) {
 						sources = [],
 						anonymousSources = [],
 						vars = [],
+						namedImports = [],
 						isModular = false,
 						middleDefaultExportID = false;
 
@@ -41,11 +43,19 @@ module.exports = function({ types: t }) {
 
 							if(specifiers.length == 0) {
 								anonymousSources.push(path.node.source);
-							} else if(specifiers.length == 1) {
+							} else if(specifiers.length == 1 && specifiers[0].type == 'ImportDefaultSpecifier') {
 								sources.push(path.node.source);
 								vars.push(specifiers[0]);
 							} else {
-								throw Error(`Not allowed to use ${specifiers.length} specifiers`);
+								let importedID = path.scope.generateUidIdentifier(path.node.source.value);
+								sources.push(path.node.source);
+								vars.push(importedID);
+
+								specifiers.forEach(({imported, local}) => {
+									namedImports.push(t.variableDeclaration("var", [
+										t.variableDeclarator(t.identifier(local.name), t.identifier(importedID.name + '.' + imported.name))
+									]));
+								});
 							}
 
 							path.remove();
@@ -63,7 +73,8 @@ module.exports = function({ types: t }) {
 							buildModule({
 								IMPORT_PATHS: sources.concat(anonymousSources),
 								IMPORT_VARS: vars,
-								BODY: path.node.body
+								BODY: path.node.body,
+								NAMED_IMPORTS: namedImports
 							})
 						];
 					}
