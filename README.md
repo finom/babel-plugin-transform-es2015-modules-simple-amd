@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-modules-simple-amd [![npm version](https://badge.fury.io/js/babel-plugin-transform-es2015-modules-simple-amd.svg)](https://badge.fury.io/js/babel-plugin-transform-es2015-modules-simple-amd)
+# babel-plugin-transform-es2015-modules-simple-amd [![npm version](https://badge.fury.io/js/babel-plugin-transform-es2015-modules-simple-amd.svg)](https://badge.fury.io/js/babel-plugin-transform-es2015-modules-simple-amd) [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 Limited transformer for ECMAScript 2015 modules (AMD)
 
