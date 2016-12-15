@@ -25,7 +25,10 @@ module.exports = function({ types: t }) {
 						let path = body[i],
 							isLast = i == body.length - 1;
 
-						if (path.isExportDefaultDeclaration()) {
+						if (path.isExportNamedDeclaration()) {
+							let declaration = path.get("declaration");
+							path.replaceWith(declaration.node);
+						} else if (path.isExportDefaultDeclaration()) {
 							let declaration = path.get("declaration");
 
 							if(isLast) {
