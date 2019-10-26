@@ -1,12 +1,12 @@
 var assert = require('assert');
-var babel = require('babel-core');
+var babel = require('@babel/core');
 var chalk = require('chalk');
 var clear = require('clear');
 var diff = require('diff');
 var fs = require('fs');
 var path = require('path');
 
-require('babel-register');
+require('@babel/register');
 
 var pluginPath = require.resolve('../src');
 
@@ -24,11 +24,24 @@ function runTests() {
 }
 
 function runTest(dir) {
-	var output = babel.transformFileSync(dir.path + '/actual.js', {
-		plugins: [pluginPath]
-	});
-
-	var expected = fs.readFileSync(dir.path + '/expected.js', 'utf-8');
+	let output;
+	let outputError;
+	try {
+		output = babel.transformFileSync(dir.path + '/actual.js', {
+			plugins: [pluginPath]
+		});
+	} catch(ex) {
+		outputError = ex;
+		output = null;
+	}
+	
+	let expected;
+	try {
+		expected = fs.readFileSync(dir.path + '/expected.js', 'utf-8');
+	} catch(ex) {
+		// Should error out.
+		expected = null;
+	}
 
 	function normalizeLines(str) {
 		return str.trimRight().replace(/\r\n/g, '\n');
@@ -37,18 +50,28 @@ function runTest(dir) {
 	process.stdout.write(chalk.bgWhite.black(dir.name));
 	process.stdout.write('\n\n');
 
-	diff.diffLines(normalizeLines(output.code), normalizeLines(expected))
-	.forEach(function (part) {
-		var value = part.value;
-		if (part.added) {
-			value = chalk.green(part.value);
-		} else if (part.removed) {
-			value = chalk.red(part.value);
+	if(expected == null) {
+		if(output == null) {
+			process.stdout.write(chalk.green("Not supported"));
+		} else {
+			process.stdout.write(chalk.red("Should have errored out."));
 		}
-
-
-		process.stdout.write(value);
-	});
+	} else if(output == null) {
+		process.stdout.write(chalk.red("Should have worked but instead errored out with: " + outputError.stack));
+	} else {
+		diff.diffLines(normalizeLines(output.code), normalizeLines(expected))
+		.forEach(function (part) {
+			var value = part.value;
+			if (part.added) {
+				value = chalk.green(part.value);
+			} else if (part.removed) {
+				value = chalk.red(part.value);
+			}
+	
+	
+			process.stdout.write(value);
+		});
+	}
 
 	process.stdout.write('\n\n\n');
 }
